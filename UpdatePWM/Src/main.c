@@ -24,6 +24,8 @@ Timer_Handler_t pwmTimer = {0};
 
 PWM_Handler_t pwmHandler = {0};
 GPIO_Handler_t pinPWM = {0};
+uint8_t defaultSpeed = 0;
+
 
 // Comunicación Rs-232 con el PC, ya habilitada en la board Nucleo 32F411
 USART_Handler_t commSerial = {0}; // Pin para la transmisión serial
@@ -193,7 +195,7 @@ void configPeripherals(void){
 	commSerial.USART_Config.parity			= USART_PARITY_NONE;
 	commSerial.USART_Config.stopbits		= USART_STOPBIT_1;
 	commSerial.USART_Config.mode			= USART_MODE_RXTX;
-	commSerial.USART_Config.enableIntRX		= USART_RX_INTERRUP_ENABLE;
+	commSerial.USART_Config.enableIntRX		= USART_RX_INTERRUPT_ENABLE;
 
 	/* Cargamos la configuración de USART */
 	usart_Config(&commSerial);
@@ -225,7 +227,7 @@ void configPeripherals(void){
  */
 
 void Timer2_Callback(void){
-	gpio_TooglePin(&stateLed);
+	gpio_TogglePin(&stateLed);
 	sendMsg = 1; // Levantamos una bandera para enviar mensajes en el Callback del USART
 }
 
