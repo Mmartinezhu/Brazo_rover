@@ -203,6 +203,7 @@ void initSystem(void){
 	stateLedBoard.pinConfig.GPIO_PinOutputSpeed		= GPIO_OSPEED_MEDIUM;
 	stateLedBoard.pinConfig.GPIO_PinPuPdControl		= GPIO_PUPDR_NOTHING;
 	gpio_Config(&stateLedBoard);
+	gpio_WritePin(&stateLedBoard, SET);
 
 
 	// 2. ===== TIMERS =====
@@ -442,7 +443,7 @@ void manageCounters(void){
 	if (counterBlinky > LimitBlinky){//cada 500 ms revisamos los contadores
 
 		gpio_TogglePin(&stateLed);//cambiamos el estado del led
-		gpio_TogglePin(&stateLedBoard);
+
 
 		if (gpio_ReadPin(&stateLed)) {//si el pin esta en alto contamos
 			if (periodBlinky > 10) {//contamos cada ciclo de encendido-apagado de led
