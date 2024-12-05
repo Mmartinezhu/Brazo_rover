@@ -101,6 +101,8 @@ char bufferData[64] = "Algoritmo...";
 void initSystem(void);
 void parseCommands(char  *ptrbufferReception);
 
+
+void changeDir(void);
 void forwardMove(float percDutyL);
 void backwardMove(float percDutyL);
 void turnOff(void);
@@ -203,7 +205,8 @@ void initSystem(void){
 	stateLedBoard.pinConfig.GPIO_PinOutputSpeed		= GPIO_OSPEED_MEDIUM;
 	stateLedBoard.pinConfig.GPIO_PinPuPdControl		= GPIO_PUPDR_NOTHING;
 	gpio_Config(&stateLedBoard);
-	gpio_WritePin(&stateLedBoard, SET);
+
+
 
 
 	// 2. ===== TIMERS =====
@@ -295,25 +298,37 @@ void parseCommands(char  *ptrbufferReception){
 	// Comando para solicitar ayuda
 	if (strcmp(cmd, "help") == 0) {
 		usart_WriteMsg(&usart2Comm, "Help Menu CMDS: \n");
-		usart_WriteMsg(&usart2Comm, "1) Dir 0:forw / 1:back ; dutty(\%) \" Dir # # @\" \n");
-		usart_WriteMsg(&usart2Comm, "1) Cuentas dutty(\%) \" Cuentas (#) @\" \n");
+		usart_WriteMsg(&usart2Comm, "0) Dir 0:forw / 1:back ; 				\"Dir # @\" \n");
+		usart_WriteMsg(&usart2Comm, "1) Pol 0:forw / 1:back ; dutty(\%) 	\"Pol # # @\" \n");
+		usart_WriteMsg(&usart2Comm, "2) Dutty # 			;				\"Dutty # @\" \n");
+		usart_WriteMsg(&usart2Comm, "3) Freq #  			; 				\"Freq # @\" \n");
+		usart_WriteMsg(&usart2Comm, "3) Period #  			; 				\"Period # @\" \n");
+		usart_WriteMsg(&usart2Comm, "6) Stop 				; 				\"Stop @\" \n");
+		usart_WriteMsg(&usart2Comm, "7) Resume 				; 				\"Resume @\" \n");
+	}
 
-		usart_WriteMsg(&usart2Comm, "2) Spd \%leftM 		; \%rightM \" Spd # # @\" \n");
-		usart_WriteMsg(&usart2Comm, "3) Rot 0:left 1:right  ; #turns  \" Rot # # @\" \n");
-		usart_WriteMsg(&usart2Comm, "4) TestEncoders percDuttyCycle:left \" TestEncoders # @\" \n");
+	else if(strcmp(cmd, "Dir") == 0) {
+			if (firstParameter == 0) {
+				gpio_WritePin(&stateLedBoard, RESET);
+				sprintf(bufferMsg,"Dirección actualizada: %.2f \n",firstParameter);
+				usart_WriteMsg(&usart2Comm, bufferMsg);
+			}
+			else if (firstParameter == 1) {
+				gpio_WritePin(&stateLedBoard, SET);
+				sprintf(bufferMsg,"Dirección actualizada: %.2f \n",firstParameter);
+				usart_WriteMsg(&usart2Comm, bufferMsg);
+			}
 
-		usart_WriteMsg(&usart2Comm, "5) Test 0:left / 1:right; dutty   \" Test # # @\" \n");
-		usart_WriteMsg(&usart2Comm, "1) Ajuste Cuentas (#) deltaDuty (float) @ \n");
 
-
-		usart_WriteMsg(&usart2Comm, "6) Stop \" Stop @\" \n");
-		usart_WriteMsg(&usart2Comm, "7) Resume \" Resume @\" \n");
+			else{
+				usart_WriteMsg(&usart2Comm, "La Dirección debe ser 0 o 1.\n Ingresa \"help @\" para ver la lista de comandos.\n");
+			}
 	}
 
 
 
 
-	else if (strcmp(cmd, "Dir") == 0) {
+	else if (strcmp(cmd, "Pol") == 0) {
 
 		// firstParameter indica la direccion, secondParameter es el dutyCycle
 		if (firstParameter == 0 && secondParameter >= 0){
@@ -356,8 +371,6 @@ void parseCommands(char  *ptrbufferReception){
 			if (firstParameter > 0) {
 
 				updateFrequency(&pwmHandler, firstParameter);
-
-
 
 				sprintf(bufferMsg,"Frecuencia actualizado: %.2f \n",firstParameter);
 				usart_WriteMsg(&usart2Comm, bufferMsg);
@@ -435,6 +448,17 @@ void backwardMove(float percDutyR){
 	startPwmSignal(&pwmHandler);
 
 }
+
+
+/* Función para manejar la direccion del motor 1 */
+void changeDir(void){
+		gpio_TogglePin(&stateLedBoard);//cambiamos el estado del led
+
+}
+
+
+
+
 
 //----------------------------------------------------------------
 
