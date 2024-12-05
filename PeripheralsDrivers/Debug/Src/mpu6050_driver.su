@@ -1,0 +1,11 @@
+../Src/mpu6050_driver.c:22:6:imuBegin	16	static
+../Src/mpu6050_driver.c:26:9:imuWhoAmI	24	static
+../Src/mpu6050_driver.c:33:6:setAccelRange	24	static
+../Src/mpu6050_driver.c:67:6:setGyroRange	24	static
+../Src/mpu6050_driver.c:95:6:readAccel	32	static
+../Src/mpu6050_driver.c:107:6:readGyro	32	static
+../Src/mpu6050_driver.c:126:6:readTemp	24	static
+../Src/mpu6050_driver.c:135:6:gyroStaticCalibration	48	static
+../Src/mpu6050_driver.c:160:6:readData	32	static
+../Src/mpu6050_driver.c:196:7:calculateAngle	24	static
+../Src/mpu6050_driver.c:203:6:setAccelDLPF	24	static
